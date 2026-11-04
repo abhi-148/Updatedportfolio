@@ -1,45 +1,90 @@
 
-import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import {
+  lazy,
+  Suspense,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
+
 import { animate } from 'framer-motion'
-import { Section, Heading, Reveal } from './ui'
+
+import {
+  Section,
+  Heading,
+  Reveal,
+} from './ui'
+
 import { useInView } from '../lib/util'
 
 const MiniScene = lazy(() => import('../three/MiniScene'))
 
-// Animated statistics
-export function CountUp({ to, dec = 0 }) {
-  const ref = useRef(null)
-  const vis = useInView(ref, '0px')
-  const [v, setV] = useState(0)
+// ========================================
+// COUNT UP ANIMATION
+// ========================================
+
+interface CountUpProps {
+  to: number
+  dec?: number
+}
+
+export function CountUp({
+  to,
+  dec = 0,
+}: CountUpProps) {
+  const ref = useRef<HTMLSpanElement>(null)
+
+  const visible = useInView(ref, '0px')
+
+  const [value, setValue] = useState(0)
+
   const done = useRef(false)
 
   useEffect(() => {
-    if (vis && !done.current) {
-      done.current = true
+    if (!visible || done.current) return
 
-      const controls = animate(0, to, {
-        duration: 1.8,
-        ease: 'easeOut',
-        onUpdate: setV,
-      })
+    done.current = true
 
-      return () => controls.stop()
-    }
-  }, [vis, to])
+    const controls = animate(0, to, {
+      duration: 1.8,
+      ease: 'easeOut',
+      onUpdate: (latest) => setValue(latest),
+    })
 
-  return <span ref={ref}>{v.toFixed(dec)}</span>
+    return () => controls.stop()
+  }, [visible, to])
+
+  return (
+    <span ref={ref}>
+      {value.toFixed(dec)}
+    </span>
+  )
 }
 
-// Professional highlights
-const stats = [
+// ========================================
+// PROFESSIONAL STATISTICS
+// ========================================
+
+type Stat = readonly [
+  number,
+  number,
+  string
+]
+
+const stats: Stat[] = [
   [3, 0, 'Professional Roles'],
   [3, 0, 'Hackathon Achievements'],
   [7.21, 2, 'CGPA / 10'],
 ]
 
+// ========================================
+// ABOUT SECTION
+// ========================================
+
 export default function About() {
   return (
     <Section id="about">
+
       <Heading
         kicker="01 — About Me"
         title="Beyond the Code"
@@ -48,6 +93,7 @@ export default function About() {
       <div className="grid items-center gap-10 md:grid-cols-2 md:gap-16">
 
         {/* 3D Visual */}
+
         <Reveal className="relative mx-auto aspect-square w-full max-w-[460px]">
 
           <div className="absolute inset-6 rounded-full bg-neon/10 blur-3xl" />
@@ -59,14 +105,17 @@ export default function About() {
         </Reveal>
 
         {/* About Content */}
+
         <div className="space-y-6 text-lg leading-relaxed text-white/65">
 
           <Reveal>
             <p>
-              I'm <span className="text-white font-semibold">
+              I'm{' '}
+              <span className="font-semibold text-white">
                 Abhishek Kumar
-              </span>, a{' '}
-              <span className="text-white font-semibold">
+              </span>
+              , a{' '}
+              <span className="font-semibold text-white">
                 Full Stack Developer and MERN Stack Developer
               </span>{' '}
               currently working full-time at Excelsior Technologies.
@@ -79,7 +128,7 @@ export default function About() {
           <Reveal delay={0.08}>
             <p>
               My development experience covers both{' '}
-              <span className="text-white font-semibold">
+              <span className="font-semibold text-white">
                 frontend and backend engineering
               </span>
               . From creating interactive user interfaces and reusable
@@ -92,7 +141,7 @@ export default function About() {
           <Reveal delay={0.16}>
             <p>
               I have hands-on experience with{' '}
-              <span className="text-white font-semibold">
+              <span className="font-semibold text-white">
                 JWT Authentication, Role-Based Access Control (RBAC),
                 CRUD operations, API integration, and database management
               </span>
@@ -113,6 +162,7 @@ export default function About() {
           </Reveal>
 
           {/* Developer Focus */}
+
           <Reveal delay={0.28}>
             <div className="flex flex-wrap gap-2 pt-1">
 
@@ -137,24 +187,28 @@ export default function About() {
             </div>
           </Reveal>
 
-          {/* Animated Stats */}
+          {/* Animated Statistics */}
+
           <Reveal
             delay={0.32}
             className="grid grid-cols-3 gap-3 pt-4"
           >
 
-            {stats.map(([n, d, l]) => (
+            {stats.map(([number, decimals, label]) => (
               <div
-                key={l}
+                key={label}
                 className="glass rounded-xl p-4 transition-transform duration-300 hover:-translate-y-1 sm:p-5"
               >
 
                 <div className="font-display text-3xl font-semibold text-grad sm:text-4xl">
-                  <CountUp to={n} dec={d} />
+                  <CountUp
+                    to={number}
+                    dec={decimals}
+                  />
                 </div>
 
                 <div className="mt-2 text-xs leading-relaxed text-white/50">
-                  {l}
+                  {label}
                 </div>
 
               </div>
@@ -164,6 +218,7 @@ export default function About() {
 
         </div>
       </div>
+
     </Section>
   )
 }
