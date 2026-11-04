@@ -1,0 +1,22 @@
+@tailwind base;@tailwind components;@tailwind utilities;
+:root{color-scheme:dark}
+html{background:#050505;scrollbar-width:thin;scrollbar-color:#1c2a4a #050505}
+html.lenis,html.lenis body{height:auto}.lenis.lenis-smooth{scroll-behavior:auto!important}
+body{margin:0;background:#050505;color:#eaf2ff;font-family:Inter,system-ui,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:#22e4ff40}
+.glass{position:relative;background:linear-gradient(145deg,rgba(255,255,255,.065),rgba(255,255,255,.015));backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.08);border-radius:1.25rem;box-shadow:0 24px 60px -24px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.06);overflow:hidden}
+.glass::before{content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;background:linear-gradient(135deg,rgba(34,228,255,.6),transparent 35%,transparent 65%,rgba(124,92,255,.6));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .4s;pointer-events:none}
+.glass:hover::before{opacity:1}
+.glass::after{content:'';position:absolute;inset:0;background:radial-gradient(420px circle at var(--mx,50%) var(--my,0%),rgba(34,228,255,.11),transparent 60%);opacity:0;transition:opacity .3s;pointer-events:none}
+.glass:hover::after{opacity:1}
+.text-grad{background:linear-gradient(100deg,#fff 5%,#a5ecff 42%,#8b7bff 95%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.btn{display:inline-flex;align-items:center;gap:.6rem;padding:.9rem 1.5rem;border-radius:999px;font-weight:500;font-size:.92rem;transition:transform .25s,box-shadow .25s,background .25s;pointer-events:auto;cursor:pointer}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:linear-gradient(120deg,#2f6bff,#22e4ff);color:#031018;box-shadow:0 10px 40px -10px #22e4ff99}
+.btn-ghost{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);backdrop-filter:blur(10px)}
+.btn-ghost:hover{border-color:#22e4ff88;background:rgba(34,228,255,.08)}
+.float{animation:float 6s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-10px)}}
+@keyframes wheel{0%{opacity:0;transform:translateY(0)}30%{opacity:1}100%{opacity:0;transform:translateY(12px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition-duration:.01ms!important}}
